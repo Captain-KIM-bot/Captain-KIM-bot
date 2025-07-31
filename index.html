@@ -32,28 +32,7 @@
 </head>
 <body class="bg-gray-100">
 
-    <!-- 비밀번호 입력 모달 -->
-    <div id="password-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
-        <div id="password-modal-content" class="bg-white rounded-lg shadow-xl p-8 w-full max-w-sm">
-             <!-- 초기 로딩 상태 -->
-            <div id="password-loading" class="flex flex-col items-center">
-                <div class="loader"></div>
-                <p class="mt-4 text-gray-600">인증 정보를 불러오는 중...</p>
-            </div>
-            <!-- 비밀번호 입력 폼 (초기에는 숨김) -->
-            <div id="password-form-container" class="hidden">
-                <h2 class="text-2xl font-bold mb-4 text-center text-gray-800">접속 인증</h2>
-                <p class="text-center text-gray-600 mb-6">비밀번호를 입력하세요.</p>
-                <form id="password-form">
-                    <input type="password" id="password-input" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="비밀번호">
-                    <p id="error-message" class="text-red-500 text-sm mt-2 h-5"></p>
-                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300 mt-4">
-                        접속하기
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
+
 
     <!-- 메인 콘텐츠 (초기에는 숨김) -->
     <div id="main-content" class="hidden container mx-auto p-4 sm:p-6 lg:p-8">
@@ -81,9 +60,6 @@
 
         // 2. 데이터가 있는 시트의 GID
         const DATA_SHEET_GID = '1416559501';
-
-        // 3. 비밀번호가 있는 시트의 이름 ('Secret')
-        const PASSWORD_SHEET_NAME = 'Secret';
 
         // CSV로 내보내기 위한 URL 생성
         const DATA_SHEET_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&gid=${DATA_SHEET_GID}`;
@@ -130,20 +106,6 @@
             }
         }
 
-        // 비밀번호 폼 제출 이벤트 처리
-        passwordForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const enteredPassword = passwordInput.value;
-
-            if (enteredPassword === correctPassword) {
-                passwordModal.classList.add('hidden');
-                mainContent.classList.remove('hidden');
-                fetchAndDisplayData();
-            } else {
-                errorMessage.textContent = '비밀번호가 올바르지 않습니다.';
-                passwordInput.select();
-            }
-        });
 
         // 메인 데이터 가져와서 표시하는 함수
         async function fetchAndDisplayData() {
