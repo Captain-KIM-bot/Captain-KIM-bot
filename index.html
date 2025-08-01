@@ -1,35 +1,164 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>MSO Report</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            text-align: center;
-            margin-top: 100px;
-        }
-        button {
-            padding: 15px 30px;
-            font-size: 18px;
-            background-color: #4B8BBE;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin: 10px;
-        }
-        button:hover {
-            background-color: #306998;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>MSO 리포트 뷰어</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+    select, button {
+      padding: 10px;
+      margin: 5px;
+      font-size: 16px;
+    }
+    h2 {
+      margin-top: 40px;
+      color: #4B8BBE;
+    }
+    iframe {
+      width: 95%;
+      height: 90vh;
+      border: none;
+      margin-top: 30px;
+    }
+    .button-group {
+      margin-bottom: 20px;
+    }
+  </style>
 </head>
 <body>
-    <h1>MSO Report</h1>
 
-    <button onclick="location.href='liting.html'">리팅 성형외과</button>
-    <button onclick="location.href='celting.html'">셀팅 의원</button>
-    <button onclick="location.href='plan.html'">플란 치과</button>
-    <button onclick="location.href='daeat.html'">다이트 한의원</button>
+  <h1>MSO 리포트 뷰어</h1>
+
+  <div>
+    <label>병원:</label>
+    <select id="hospital" onchange="updateBranches()">
+      <option value="">선택하세요</option>
+    </select>
+
+    <label>지점:</label>
+    <select id="branch" onchange="updateMonths()">
+      <option value="">선택하세요</option>
+    </select>
+  </div>
+
+  <!-- 📄 보고서 -->
+  <h2>📄 보고서</h2>
+  <div id="report-buttons" class="button-group"></div>
+
+  <!-- 📁 추가자료 -->
+  <h2>📁 추가자료</h2>
+  <div>
+    <label for="extra-month">연월:</label>
+    <select id="extra-month" onchange="loadExtraReport()">
+      <option value="">선택하세요</option>
+    </select>
+  </div>
+
+  <iframe id="reportFrame" src="" style="display:none;"></iframe>
+
+  <script>
+    const data = {
+      liting: {
+        name: "리팅",
+        branches: {
+          seoul: { name: "서울", urls: {
+            "2507": "https://docs.google.com/spreadsheets/d/14QC_YDaUaKWFMwLI1rqICkoLXQUGkMdsI534OhuHpdw/pubhtml"
+          }},
+          // ... 다른 지점 추가 가능
+        }
+      },
+      celting: {
+        name: "셀팅",
+        branches: {
+          suwon: { name: "수원", urls: {
+            "2504": "https://example.com/celting_suwon_2504",
+            "2505": "https://example.com/celting_suwon_2505",
+            "2506": "https://example.com/celting_suwon_2506",
+            "2507": "https://example.com/celting_suwon_2507",
+            "2508": "https://example.com/celting_suwon_2508"
+          }}
+        }
+      }
+    };
+
+    function updateBranches() {
+      const hospital = document.getElementById("hospital").value;
+      const branchSelect = document.getElementById("branch");
+      branchSelect.innerHTML = '<option value="">선택하세요</option>';
+      clearReports();
+
+      if (!hospital || !data[hospital]) return;
+
+      const branches = data[hospital].branches;
+      for (const key in branches) {
+        const option = document.createElement("option");
+        option.value = key;
+        option.textContent = branches[key].name;
+        branchSelect.appendChild(option);
+      }
+    }
+
+    function updateMonths() {
+      clearReports();
+
+      const hospital = document.getElementById("hospital").value;
+      const branch = document.getElementById("branch").value;
+
+      if (!hospital || !branch) return;
+
+      const urls = data[hospital].branches[branch].urls;
+      const reportButtons = document.getElementById("report-buttons");
+      const extraSelect = document.getElementById("extra-month");
+
+      // 보고서 버튼
+      for (const month in urls) {
+        const btn = document.createElement("button");
+        btn.textContent = month;
+        btn.onclick = () => loadUrl(urls[month]);
+        reportButtons.appendChild(btn);
+      }
+
+      // 추가자료 드롭다운
+      extraSelect.innerHTML = '<option value="">선택하세요</option>';
+      for (const month in urls) {
+        const opt = document.createElement("option");
+        opt.value = urls[month];
+        opt.textContent = month;
+        extraSelect.appendChild(opt);
+      }
+    }
+
+    function loadUrl(url) {
+      const frame = document.getElementById("reportFrame");
+      frame.src = url.includes("pubhtml") ? url + "?widget=true&headers=false" : url;
+      frame.style.display = "block";
+    }
+
+    function loadExtraReport() {
+      const url = document.getElementById("extra-month").value;
+      if (url) loadUrl(url);
+    }
+
+    function clearReports() {
+      document.getElementById("report-buttons").innerHTML = "";
+      document.getElementById("extra-month").innerHTML = '<option value="">선택하세요</option>';
+      document.getElementById("reportFrame").style.display = "none";
+    }
+
+    // 초기 병원 리스트
+    window.onload = () => {
+      const select = document.getElementById("hospital");
+      for (const code in data) {
+        const opt = document.createElement("option");
+        opt.value = code;
+        opt.textContent = data[code].name;
+        select.appendChild(opt);
+      }
+    };
+  </script>
 </body>
 </html>
