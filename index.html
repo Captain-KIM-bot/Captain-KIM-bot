@@ -3,154 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>데이터 뷰어</title>
-    <!-- Tailwind CSS CDN 로드 -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts (Inter) 로드 -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>파이썬 기초 배우기</title>
     <style>
-        /* Noto Sans KR 폰트를 기본으로 사용하고, Inter 폰트를 대체 폰트로 지정합니다. */
         body {
-            font-family: 'Noto Sans KR', 'Inter', sans-serif;
+            font-family: '맑은 고딕', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
         }
-        /* 로딩 스피너 스타일 */
-        .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
+        header {
+            background-color: #4B8BBE;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        main {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        h1 {
+            margin-bottom: 0;
+        }
+        p {
+            font-size: 1.1em;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9em;
         }
     </style>
 </head>
-<body class="bg-gray-100">
+<body>
+    <header>
+        <h1>파이썬 기초 배우기</h1>
+        <p>프로그래밍 입문자를 위한 쉬운 파이썬 가이드</p>
+    </header>
 
-    <!-- 메인 콘텐츠 -->
-    <div id="main-content" class="container mx-auto p-4 sm:p-6 lg:p-8">
-        <h1 class="text-3xl font-bold mb-6 text-gray-800">스프레드시트 데이터</h1>
-        
-        <!-- 로딩 인디케이터 -->
-        <div id="loading-indicator" class="flex justify-center items-center h-64">
-            <div class="loader"></div>
-            <p class="ml-4 text-gray-600">데이터를 불러오는 중입니다...</p>
-        </div>
+    <main>
+        <section>
+            <h2>📌 시작하며</h2>
+            <p>
+                파이썬은 배우기 쉬우면서도 강력한 프로그래밍 언어입니다.<br>
+                이 블로그에서는 파이썬 기초 문법부터 실생활 예제까지 단계별로 소개합니다.
+            </p>
+        </section>
 
-        <!-- 데이터 테이블 (초기에는 숨김) -->
-        <div id="data-container" class="hidden bg-white rounded-lg shadow-md overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead id="table-head" class="bg-gray-50">
-                </thead>
-                <tbody id="table-body" class="bg-white divide-y divide-gray-200">
-                </tbody>
-            </table>
-        </div>
-    </div>
+        <section>
+            <h2>🧰 다루는 내용</h2>
+            <ul>
+                <li>파이썬 설치 및 개발 환경 설정</li>
+                <li>변수와 자료형</li>
+                <li>조건문과 반복문</li>
+                <li>함수, 모듈, 파일 입출력</li>
+                <li>간단한 프로젝트 예제</li>
+            </ul>
+        </section>
 
-    <script>
-        // --- 설정 영역 ---
-        // 1. 구글 스프레드시트 ID
-        const SPREADSHEET_ID = '1gfuLwqIzgAcRQIfNiCvFv7FzPzzb-LslvgD35uf5rDQ';
+        <section>
+            <h2>🎯 목표</h2>
+            <p>
+                누구나 이해할 수 있는 쉬운 설명으로 파이썬을 처음 배우는 분들이<br>
+                프로그래밍에 자신감을 가질 수 있도록 돕는 것이 이 블로그의 목표입니다.
+            </p>
+        </section>
+    </main>
 
-        // 2. 데이터가 있는 시트의 GID
-        const DATA_SHEET_GID = '1416559501';
-
-        // CSV로 내보내기 위한 URL 생성
-        const DATA_SHEET_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&gid=${DATA_SHEET_GID}`;
-        // --- 설정 영역 끝 ---
-
-        // DOM 요소 가져오기
-        const mainContent = document.getElementById('main-content');
-        const loadingIndicator = document.getElementById('loading-indicator');
-        const dataContainer = document.getElementById('data-container');
-        const tableHead = document.getElementById('table-head');
-        const tableBody = document.getElementById('table-body');
-
-        // 메인 데이터 가져와서 표시하는 함수
-        async function fetchAndDisplayData() {
-            try {
-                const response = await fetch(DATA_SHEET_URL);
-                if (!response.ok) {
-                    throw new Error(`데이터 시트 로드 실패: ${response.status}`);
-                }
-                const csvText = await response.text();
-                const data = parseCSV(csvText);
-                
-                displayData(data);
-
-                // 로딩 숨기고 데이터 컨테이너 표시
-                loadingIndicator.classList.add('hidden');
-                dataContainer.classList.remove('hidden');
-
-            } catch (error) {
-                console.error('데이터를 가져오는 중 오류 발생:', error);
-                loadingIndicator.innerHTML = '<p class="text-red-500">데이터를 불러오는 데 실패했습니다. 데이터 시트가 웹에 게시되었는지 확인해주세요.</p>';
-            }
-        }
-
-        // CSV 텍스트를 객체 배열로 파싱하는 함수
-        function parseCSV(text) {
-            const lines = text.trim().split('\n');
-            if (lines.length === 0) return [];
-            
-            // 첫 줄을 헤더로 사용
-            const headers = lines.shift().split(',').map(h => h.trim().replace(/"/g, ''));
-            const rows = [];
-
-            lines.forEach(line => {
-                const values = line.split(',').map(v => v.trim().replace(/"/g, ''));
-                if (values.length === headers.length) {
-                    const rowObject = headers.reduce((obj, header, index) => {
-                        obj[header] = values[index];
-                        return obj;
-                    }, {});
-                    rows.push(rowObject);
-                }
-            });
-            return rows;
-        }
-
-        // 파싱된 데이터를 HTML 테이블로 표시하는 함수
-        function displayData(data) {
-            if (!data || data.length === 0) {
-                dataContainer.innerHTML = '<p class="p-4 text-center text-gray-500">표시할 데이터가 없습니다.</p>';
-                return;
-            }
-
-            // 테이블 헤더 생성
-            const headers = Object.keys(data[0]);
-            const headerRow = document.createElement('tr');
-            headers.forEach(headerText => {
-                const th = document.createElement('th');
-                th.scope = 'col';
-                th.className = 'px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider';
-                th.textContent = headerText;
-                headerRow.appendChild(th);
-            });
-            tableHead.appendChild(headerRow);
-
-            // 테이블 바디 생성
-            data.forEach(rowData => {
-                const row = document.createElement('tr');
-                headers.forEach(header => {
-                    const cell = document.createElement('td');
-                    cell.className = 'px-6 py-4 whitespace-nowrap text-sm text-gray-700';
-                    cell.textContent = rowData[header];
-                    row.appendChild(cell);
-                });
-                tableBody.appendChild(row);
-            });
-        }
-
-        // 페이지 로드 시 데이터 가져오기 실행
-        fetchAndDisplayData();
-    </script>
-
+    <footer>
+        © 2025 파이썬 기초 배우기 블로그
+    </footer>
 </body>
 </html>
