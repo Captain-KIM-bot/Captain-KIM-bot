@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>파이썬 변수와 자료형</title>
+    <style>
+        body {
+            font-family: '맑은 고딕', sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #306998;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        main {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        h1, h2 {
+            color: #306998;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-left: 5px solid #306998;
+            overflow-x: auto;
+        }
+        code {
+            font-family: Consolas, monospace;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>파이썬 변수와 자료형</h1>
+        <p>기초부터 예제까지 차근차근 알아보기</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>🔸 변수란?</h2>
+            <p>
+                변수는 데이터를 저장하기 위한 이름표입니다. <br>
+                파이썬에서는 별도의 자료형 선언 없이 변수에 값을 할당할 수 있습니다.
+            </p>
+            <pre><code># 변수 선언 예시
+name = "홍길동"
+age = 25
+height = 180.5
+is_student = True</code></pre>
+        </section>
+
+        <section>
+            <h2>🔸 주요 자료형</h2>
+            <ul>
+                <li><strong>int</strong> : 정수형</li>
+                <li><strong>float</strong> : 실수형</li>
+                <li><strong>str</strong> : 문자열</li>
+                <li><strong>bool</strong> : 불린형 (참/거짓)</li>
+                <li><strong>list</strong> : 리스트</li>
+                <li><strong>dict</strong> : 딕셔너리</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>🔸 자료형 예제</h2>
+            <pre><code># 정수형
+a = 10
+
+# 실수형
+b = 3.14
+
+# 문자열
+c = "안녕하세요"
+
+# 불린형
+d = True
+
+# 리스트
+e = [1, 2, 3, 4]
+
+# 딕셔너리
+f = {"이름": "철수", "나이": 30}</code></pre>
+        </section>
+
+        <section>
+            <h2>🔸 자료형 확인</h2>
+            <p><code>type()</code> 함수를 사용하면 변수의 자료형을 확인할 수 있습니다.</p>
+            <pre><code>print(type(a))  # <class 'int'>
+print(type(c))  # <class 'str'>
+print(type(e))  # <class 'list'></code></pre>
+        </section>
+
+        <section>
+            <h2>💡 팁</h2>
+            <ul>
+                <li>변수명은 영문자, 숫자, 밑줄(_)로 구성되며 숫자로 시작할 수 없습니다.</li>
+                <li>파이썬의 예약어(ex. if, while, for 등)는 변수명으로 사용할 수 없습니다.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        © 2025 파이썬 기초 배우기 블로그
+    </footer>
+</body>
+</html>
